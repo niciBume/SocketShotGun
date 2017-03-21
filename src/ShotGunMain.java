@@ -9,7 +9,7 @@ public class ShotGunMain {
     BufferedReader input;
     BufferedWriter output;
     int GameId;
-    int roundCounter;
+    int roundCounter, magCounter = 0;
     String enemyMove = " ";
     boolean goOn = true, enemyIsLoaded = false;
 
@@ -35,12 +35,26 @@ public class ShotGunMain {
             this.write("Auth bee2fl3");
             response = this.read();
             if (response.startsWith("Ack")){
-                response = read();
+
+                response = this.read();
                 if (response.startsWith("Game")){
                     String[] GameIDString = response.split("\\s");
                     GameId = Integer.parseInt(GameIDString[1]);
                     System.out.println("GameID: " + GameId);
-                    fancyStuff();
+                }
+
+                write("ChangeMode Easy");
+                response = read();
+
+                if (response.startsWith("Challenge")){
+                    String[] challengeArray = response.split("\\s");
+                    int answer = Integer.parseInt(challengeArray[1]) * Integer.parseInt(challengeArray[2]);
+
+                    write("Response " + String.valueOf(answer));
+                    response = read();
+                    if (response.startsWith("Ack Game")){
+                        fancyStuff();
+                    }
                 }
             }
         }
@@ -69,12 +83,18 @@ public class ShotGunMain {
     }
 
     public void isEnemyLoaded(String enemyMove){
-        if (enemyMove.equals("Reload")) enemyIsLoaded = true;
-        if (enemyMove.equals("Shoot")) enemyIsLoaded = false;
+        if (enemyMove.equals("Reload")){
+            magCounter++;
+        }
+        else if (enemyMove.equals("Shoot")) {
+            magCounter--;
+        }
+
+        if (magCounter > 0) enemyIsLoaded = true;
+        else enemyIsLoaded = false;
     }
 
     public void fancyStuff() throws IOException {
-        System.out.println("starting fancy shit");
         write("DoMove " + GameId + " Reload");
         roundCounter++;
 
