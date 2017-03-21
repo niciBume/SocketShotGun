@@ -10,7 +10,7 @@ public class ShotGunMain {
     BufferedWriter output;
     int GameId;
     int roundCounter, magCounter = 0;
-    String enemyMove = " ";
+    String enemyMove = "Hallo Vater";
     boolean goOn = true, enemyIsLoaded = false;
 
     public ShotGunMain(){
